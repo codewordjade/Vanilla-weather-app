@@ -64,6 +64,30 @@ function displayForecast(response) {
   forecastElement.innerHTML = forecastHTML;
 }
 
+function getCurrentLocation(event) {
+  event.preventDefault();
+  navigator.geolocation.getCurrentPosition(searchLocation);
+}
+
+function searchLocation(position) {
+  let apiKey = "6f06c2cc91d0ad673e8c76f492c3b67f";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(showCurrentWeather);
+}
+
+function showCurrentWeather(response) {
+  document.querySelector("h1").innerHTML = response.data.name;
+  document.querySelector(".current-temp").innerHTML = Math.round(
+    response.data.main.temp
+  );
+  document.querySelector("#humidity").innerHTML = response.data.main.humidity;
+  document.querySelector("#wind").innerHTML = Math.round(
+    response.data.wind.speed
+  );
+  document.querySelector("#description").innerHTML =
+    response.data.weather[0].main;
+}
+
 function getForecast(coordinates) {
   let apiKey = "6f06c2cc91d0ad673e8c76f492c3b67f";
   let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
@@ -133,5 +157,8 @@ fahrenheitLink.addEventListener("click", displayFahrenheitTemperature);
 
 let celsiusLink = document.querySelector("#celsius-link");
 celsiusLink.addEventListener("click", displayCelsiusTemperature);
+
+let currentLocationButton = document.querySelector("#current-location-button");
+currentLocationButton.addEventListener("click", getCurrentLocation);
 
 search("Leeds");

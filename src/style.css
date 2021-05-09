@@ -95,3 +95,7 @@ a {
 .forecast-temp-min {
   opacity: 0.5;
 }
+
+#current-location-button {
+  margin-left: 45px;
+}
